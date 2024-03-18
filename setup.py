@@ -11,10 +11,13 @@ from setuptools import setup
 
 setup(
     name='vcx_py',
-    version='1',
+    version='1.0.1',
     packages=['vcx_py'],
     license='MIT',
     author='Aaron Janeiro Stone',
     author_email='aaron@thequant.ca',
-    description='A simple python client for the VirgoCX API'
+    description='A simple python client for the VirgoCX API',
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
+    url='https://www.github.com/aarjaneiro/vcx_py'
 )

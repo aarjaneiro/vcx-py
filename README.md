@@ -14,6 +14,14 @@ that the IP address of the machine you are running this client from is whitelist
 
 ### Installation
 
+#### From PyPi
+You can install this package from PyPi by running the following command in your terminal:
+
+```bash
+pip install vcx-py
+```
+
+#### From Source
 After setting up your environment, install this package from source by running the following command in the
 root directory of this project:
 
