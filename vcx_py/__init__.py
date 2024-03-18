@@ -9,5 +9,6 @@
 
 from .client import VirgoCXClient
 from .constants import KLineType, OrderStatus, OrderType, OrderDirection, Enums
+from .utils import VirgoCXException
 
-__all__ = ["VirgoCXClient", "KLineType", "OrderStatus", "OrderType", "OrderDirection", "Enums"]
+__all__ = ["VirgoCXClient", "VirgoCXException", "KLineType", "OrderStatus", "OrderType", "OrderDirection", "Enums"]

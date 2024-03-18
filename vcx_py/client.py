@@ -7,67 +7,13 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-from hashlib import md5
-from typing import Union, Optional
+from typing import Optional
 
 import requests as rq
 
-from .constants import TYPICAL_KEY_TO_ENUM, ATYPICAL_KEY_TO_ENUM, ROOT_ADDRESS, VERIFICATION, KLineType, OrderStatus, \
+from .constants import ROOT_ADDRESS, VERIFICATION, KLineType, OrderStatus, \
     OrderType, OrderDirection
-
-
-def _output_enumify(inp: Union[dict, list], typical: bool = True) -> Union[dict, list]:
-    """
-    Converts the keys in a dictionary to their respective enums.
-    """
-    mapping = TYPICAL_KEY_TO_ENUM if typical else ATYPICAL_KEY_TO_ENUM
-    if isinstance(inp, dict):
-        out = {}
-        for k, v in inp.items():
-            if k in mapping:
-                out[k] = mapping[k](v)
-            else:
-                out[k] = v
-        return out
-    elif isinstance(inp, list):
-        return [_output_enumify(i, typical) for i in inp]
-    return inp
-
-
-def vcx_sig(dct: dict, api_secret: str = None) -> str:
-    """
-    Returns the signature required for an authenticated VirgoCX API request.
-    """
-    _dct = dct.copy()
-    if "apiSecret" not in _dct:
-        if api_secret is None:
-            raise ValueError("API secret is required")
-        _dct["apiSecret"] = api_secret
-    val_str = ""
-    for k in sorted(_dct.keys()):
-        val_str += str(_dct[k])
-    return md5(val_str.encode()).hexdigest()
-
-
-def _res_handler(typical_map: bool = True):
-    """
-    Handles the response from the VirgoCX API.
-    """
-
-    def outer(fn: callable):
-        def inner(*args, **kwargs):
-            res = fn(*args, **kwargs)
-            if res.status_code != 200:
-                raise ValueError(f"Request failed with status code {res.status_code}: {res.text}")
-            res = res.json()
-            if res["code"] != 0:
-                raise ValueError(f"Request failed with error code {res['code']}: {res['msg']}")
-            res = res["data"]
-            return _output_enumify(res, typical_map)
-
-        return inner
-
-    return outer
+from .utils import vcx_sign, result_formatter
 
 
 class VirgoCXClient:
@@ -77,12 +23,12 @@ class VirgoCXClient:
             return api_key
 
         def signer(dct: dict):
-            return vcx_sig(dct, api_secret)
+            return vcx_sign(dct, api_secret)
 
         self.signer = signer
         self._api_key = _api_key
 
-    @_res_handler()
+    @result_formatter()
     def kline(self, symbol: str, period: KLineType) -> rq.Response:
         """
         Returns the kline data for a given symbol and period.
@@ -95,7 +41,7 @@ class VirgoCXClient:
         return rq.get(f"{ROOT_ADDRESS}/market/history/kline", params={"symbol": symbol, "period": period},
                       verify=VERIFICATION)
 
-    @_res_handler()
+    @result_formatter()
     def ticker(self, symbol: str) -> rq.Response:
         """
         Returns the ticker data for a given symbol.
@@ -104,14 +50,14 @@ class VirgoCXClient:
         """
         return rq.get(f"{ROOT_ADDRESS}/market/detail/merged", params={"symbol": symbol}, verify=VERIFICATION)
 
-    @_res_handler()
+    @result_formatter()
     def tickers(self) -> rq.Response:
         """
         Returns the ticker data for all symbols.
         """
         return rq.get(f"{ROOT_ADDRESS}/market/tickers", verify=VERIFICATION)
 
-    @_res_handler()
+    @result_formatter()
     def account_info(self) -> rq.Response:
         """
         Returns the account information.
@@ -120,7 +66,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.get(f"{ROOT_ADDRESS}/member/accounts", params=payload, verify=VERIFICATION)
 
-    @_res_handler()
+    @result_formatter()
     def query_orders(self, symbol: str, status: Optional[OrderStatus] = None) -> rq.Response:
         """
         Returns user orders for a given symbol and status.
@@ -136,7 +82,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.get(f"{ROOT_ADDRESS}/member/queryOrder", params=payload, verify=VERIFICATION)
 
-    @_res_handler(False)
+    @result_formatter(False)
     def query_trades(self, symbol: str) -> rq.Response:
         """
         Returns (completed) user trades for a given symbol.
@@ -147,7 +93,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.get(f"{ROOT_ADDRESS}/member/queryTrade", params=payload, verify=VERIFICATION)
 
-    @_res_handler()
+    @result_formatter()
     def place_order(self, symbol: str, category: OrderType, direction: OrderDirection,
                     price: Optional[float] = None, qty: Optional[float] = None,
                     total: Optional[float] = None) -> rq.Response:
@@ -190,7 +136,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.post(f"{ROOT_ADDRESS}/member/addOrder", data=payload, verify=VERIFICATION)
 
-    @_res_handler()
+    @result_formatter()
     def cancel_order(self, order_id: str) -> rq.Response:
         """
         Cancels an order.
@@ -201,7 +147,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.post(f"{ROOT_ADDRESS}/member/cancelOrder", data=payload, verify=VERIFICATION)
 
-    @_res_handler()
+    @result_formatter()
     def get_discount(self, symbol: Optional[str] = None) -> rq.Response:
         """
         Returns the discount for a given symbol (or all symbols if one is not provided).
