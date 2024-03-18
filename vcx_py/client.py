@@ -159,7 +159,7 @@ class VirgoCXClient:
         :param direction: The direction of the order.
         :param price: The price of the order (optional).
         :param qty: The quantity of the order in terms of the cryptocurrency (optional).
-        :param total: The total value of the order in terms of Canadian dollars (optional).
+        :param total: The total value of the order in terms of the fiat currency (optional).
 
         Note that `price` is required for limit orders and `total` is required for non-limit buy orders
         (otherwise `qty` is required).
