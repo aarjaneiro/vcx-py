@@ -8,5 +8,6 @@
 #  SOFTWARE.
 
 from .client import VirgoCXClient
+from .constants import KLineType, OrderStatus, OrderType, OrderDirection, Enums
 
-__all__ = ["VirgoCXClient"]
+__all__ = ["VirgoCXClient", "KLineType", "OrderStatus", "OrderType", "OrderDirection", "Enums"]

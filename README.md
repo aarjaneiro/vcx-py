@@ -18,7 +18,6 @@ After setting up your environment, install this package from source by running t
 root directory of this project:
 
 ```bash
-pip install -r requirements.txt # Install dependencies
 pip install . # Install the package to your environment
 ```
 
@@ -28,7 +27,7 @@ As an example, you can use the following code to get your account information:
 
 ```python
 
-from vcx_py.client import VirgoCXClient
+from vcx_py import VirgoCXClient
 
 vc = VirgoCXClient(api_key='your_api_key', api_secret='your_secret')
 print(vc.account_info())

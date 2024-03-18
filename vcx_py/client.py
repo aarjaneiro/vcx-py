@@ -6,12 +6,13 @@
 #  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
+
 from hashlib import md5
 from typing import Union, Optional
 
 import requests as rq
 
-from .constants import TYPICAL_KEY_TO_ENUM, ATYPICAL_KEY_TO_ENUM, KLineType, ROOT_ADDRESS, VERIFICATION, OrderStatus, \
+from .constants import TYPICAL_KEY_TO_ENUM, ATYPICAL_KEY_TO_ENUM, ROOT_ADDRESS, VERIFICATION, KLineType, OrderStatus, \
     OrderType, OrderDirection
 
 

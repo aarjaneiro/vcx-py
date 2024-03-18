@@ -88,3 +88,13 @@ ATYPICAL_KEY_TO_ENUM = {
 """
 Mapping of keys to enums in the atypical case.
 """
+
+
+class Enums:
+    """
+    VirgoCX API enums.
+    """
+    KLineType = KLineType
+    OrderStatus = OrderStatus
+    OrderDirection = OrderDirection
+    OrderType = OrderType
