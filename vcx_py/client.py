@@ -150,7 +150,8 @@ class VirgoCXClient:
     @result_formatter()
     def get_discount(self, symbol: Optional[str] = None) -> rq.Response:
         """
-        Returns the discount for a given symbol (or all symbols if one is not provided).
+        Returns the same output as `ticker` for a given symbol (or all symbols if one is not provided) with
+        your account discount applied to prices.
 
         :param symbol: The symbol to query (optional).
         """
