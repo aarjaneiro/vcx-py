@@ -67,13 +67,13 @@ def vcx_sign(dct: dict, api_secret: str = None) -> str:
     return md5(val_str.encode()).hexdigest()
 
 
-def result_formatter(typical_map: bool = True):
+def result_formatter(typical_map: bool = True) -> callable:
     """
     Handles the response from the VirgoCX API.
     """
 
-    def outer(fn: callable):
-        def inner(*args, **kwargs):
+    def outer(fn: callable) -> callable:
+        def inner(*args, **kwargs) -> Union[dict, list]:
             res = fn(*args, **kwargs)
             if res.status_code != 200:
                 raise VirgoCXStatusException(f"Request failed with status code {res.status_code}: {res.text}")

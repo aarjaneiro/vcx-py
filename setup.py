@@ -11,7 +11,7 @@ from setuptools import setup
 
 setup(
     name='vcx_py',
-    version='1.0.3',
+    version='1.0.4',
     packages=['vcx_py'],
     license='MIT',
     author='Aaron Janeiro Stone',

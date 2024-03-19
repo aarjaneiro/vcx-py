@@ -29,7 +29,7 @@ class VirgoCXClient:
         self._api_key = _api_key
 
     @result_formatter()
-    def kline(self, symbol: str, period: KLineType) -> rq.Response:
+    def kline(self, symbol: str, period: KLineType):
         """
         Returns the kline data for a given symbol and period.
 
@@ -42,7 +42,7 @@ class VirgoCXClient:
                       verify=VERIFICATION)
 
     @result_formatter()
-    def ticker(self, symbol: str) -> rq.Response:
+    def ticker(self, symbol: str):
         """
         Returns the ticker data for a given symbol.
 
@@ -51,14 +51,14 @@ class VirgoCXClient:
         return rq.get(f"{ROOT_ADDRESS}/market/detail/merged", params={"symbol": symbol}, verify=VERIFICATION)
 
     @result_formatter()
-    def tickers(self) -> rq.Response:
+    def tickers(self):
         """
         Returns the ticker data for all symbols.
         """
         return rq.get(f"{ROOT_ADDRESS}/market/tickers", verify=VERIFICATION)
 
     @result_formatter()
-    def account_info(self) -> rq.Response:
+    def account_info(self):
         """
         Returns the account information.
         """
@@ -67,7 +67,7 @@ class VirgoCXClient:
         return rq.get(f"{ROOT_ADDRESS}/member/accounts", params=payload, verify=VERIFICATION)
 
     @result_formatter()
-    def query_orders(self, symbol: str, status: Optional[OrderStatus] = None) -> rq.Response:
+    def query_orders(self, symbol: str, status: Optional[OrderStatus] = None):
         """
         Returns user orders for a given symbol and status.
 
@@ -83,7 +83,7 @@ class VirgoCXClient:
         return rq.get(f"{ROOT_ADDRESS}/member/queryOrder", params=payload, verify=VERIFICATION)
 
     @result_formatter(False)
-    def query_trades(self, symbol: str) -> rq.Response:
+    def query_trades(self, symbol: str):
         """
         Returns (completed) user trades for a given symbol.
 
@@ -96,7 +96,7 @@ class VirgoCXClient:
     @result_formatter()
     def place_order(self, symbol: str, category: OrderType, direction: OrderDirection,
                     price: Optional[float] = None, qty: Optional[float] = None,
-                    total: Optional[float] = None) -> rq.Response:
+                    total: Optional[float] = None):
         """
         Places an order.
 
@@ -137,7 +137,7 @@ class VirgoCXClient:
         return rq.post(f"{ROOT_ADDRESS}/member/addOrder", data=payload, verify=VERIFICATION)
 
     @result_formatter()
-    def cancel_order(self, order_id: str) -> rq.Response:
+    def cancel_order(self, order_id: str):
         """
         Cancels an order.
 
@@ -148,10 +148,12 @@ class VirgoCXClient:
         return rq.post(f"{ROOT_ADDRESS}/member/cancelOrder", data=payload, verify=VERIFICATION)
 
     @result_formatter()
-    def get_discount(self, symbol: Optional[str] = None) -> rq.Response:
+    def get_discount(self, symbol: Optional[str] = None):
         """
-        Returns the same output as `ticker` for a given symbol (or all symbols if one is not provided) with
+        Returns similar output as `ticker` for a given symbol (or all symbols if one is not provided) with
         your account discount applied to prices.
+
+        Note that this method always returns a list of dictionaries, even if only one symbol is queried.
 
         :param symbol: The symbol to query (optional).
         """

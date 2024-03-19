@@ -130,7 +130,7 @@ vc.cancel_order(order_id=12345)
 
 ### Get Discount
 
-Returns the same output as `ticker` for a given symbol (or all symbols if one is not provided) with your account
+Returns similar output as `ticker` for a given symbol (or all symbols if one is not provided) with your account
 discount applied to prices.
 
 ```python
