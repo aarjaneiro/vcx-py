@@ -123,8 +123,6 @@ class VirgoCXClient:
         else:
             if total is None and direction == OrderDirection.BUY:
                 raise ValueError("Total is required for non-limit buy orders")
-            elif qty is None:
-                raise ValueError("Quantity is required for all but non-limit buy orders")
 
         payload = {"apiKey": self._api_key(), "symbol": symbol, "category": category, "type": direction,
                    "country": 1}
