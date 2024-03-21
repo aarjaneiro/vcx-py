@@ -13,6 +13,13 @@ from typing import Union
 from vcx_py.constants import TYPICAL_KEY_TO_ENUM, ATYPICAL_KEY_TO_ENUM
 
 
+class VirgoCXWarning(Warning):
+    """
+    Base warning for the VirgoCX API.
+    """
+    pass  # overrides allow for optional fine-grained control
+
+
 class VirgoCXException(Exception):
     """
     Base exception for the VirgoCX API.
