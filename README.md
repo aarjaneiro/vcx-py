@@ -5,6 +5,8 @@ A simple Python client for the VirgoCX API.
 For more information on the REST api on which this was built, please refer to the
 [VirgoCX API Documentation](https://github.com/VirgocxDev/VirgocxApiDoc).
 
+#### If you are registering for a new account, please consider using my referral code (`t74uUoso`) or following [this link to the registration page which will automatically apply the code](https://virgocx.ca/register?code=t74uUoso).
+
 ## Table of Contents
 
 - [Setup](#setup)
