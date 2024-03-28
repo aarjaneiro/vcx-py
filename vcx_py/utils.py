@@ -95,5 +95,5 @@ def result_formatter(typical_map: bool = True) -> callable:
     return outer
 
 
-__all__ = ["VirgoCXException", "VirgoCXStatusException", "VirgoCXAPIError", "output_enumify", "vcx_sign",
-           "result_formatter"]
+__all__ = ["VirgoCXException", "VirgoCXWarning", "VirgoCXStatusException", "VirgoCXAPIError", "output_enumify",
+           "vcx_sign", "result_formatter"]

@@ -24,6 +24,7 @@ class VirgoCXClient:
     """
     FMT_DATA = None  # created by first instance
     STATIC_LOCK = Lock()  # in case of multithreading, locks the formatting cache
+    ENDPOINT = ROOT_ADDRESS  # can be changed for testing
 
     def __init__(self, api_key: str = None, api_secret: str = None):
         # Prevents the api key and secret from being visible as class attributes
@@ -53,7 +54,7 @@ class VirgoCXClient:
         """
         if isinstance(period, KLineType):
             period = period.value
-        return rq.get(f"{ROOT_ADDRESS}/market/history/kline", params={"symbol": symbol, "period": period},
+        return rq.get(f"{self.ENDPOINT}/market/history/kline", params={"symbol": symbol, "period": period},
                       verify=VERIFICATION)
 
     @result_formatter()
@@ -63,14 +64,14 @@ class VirgoCXClient:
 
         :param symbol: The symbol to query.
         """
-        return rq.get(f"{ROOT_ADDRESS}/market/detail/merged", params={"symbol": symbol}, verify=VERIFICATION)
+        return rq.get(f"{self.ENDPOINT}/market/detail/merged", params={"symbol": symbol}, verify=VERIFICATION)
 
     @result_formatter()
     def tickers(self):
         """
         Returns the ticker data for all symbols.
         """
-        return rq.get(f"{ROOT_ADDRESS}/market/tickers", verify=VERIFICATION)
+        return rq.get(f"{self.ENDPOINT}/market/tickers", verify=VERIFICATION)
 
     @result_formatter()
     def account_info(self):
@@ -79,7 +80,7 @@ class VirgoCXClient:
         """
         payload = {"apiKey": self._api_key()}
         payload["sign"] = self.signer(payload)
-        return rq.get(f"{ROOT_ADDRESS}/member/accounts", params=payload, verify=VERIFICATION)
+        return rq.get(f"{self.ENDPOINT}/member/accounts", params=payload, verify=VERIFICATION)
 
     @result_formatter()
     def query_orders(self, symbol: str, status: Optional[OrderStatus] = None):
@@ -95,7 +96,7 @@ class VirgoCXClient:
                 status = status.value
             payload["status"] = status
         payload["sign"] = self.signer(payload)
-        return rq.get(f"{ROOT_ADDRESS}/member/queryOrder", params=payload, verify=VERIFICATION)
+        return rq.get(f"{self.ENDPOINT}/member/queryOrder", params=payload, verify=VERIFICATION)
 
     @result_formatter(False)
     def query_trades(self, symbol: str):
@@ -106,7 +107,7 @@ class VirgoCXClient:
         """
         payload = {"apiKey": self._api_key(), "symbol": symbol}
         payload["sign"] = self.signer(payload)
-        return rq.get(f"{ROOT_ADDRESS}/member/queryTrade", params=payload, verify=VERIFICATION)
+        return rq.get(f"{self.ENDPOINT}/member/queryTrade", params=payload, verify=VERIFICATION)
 
     @result_formatter()
     def place_order(self, symbol: str, category: OrderType, direction: OrderDirection,
@@ -192,7 +193,7 @@ class VirgoCXClient:
 
         # Sign and send request
         payload["sign"] = self.signer(payload)
-        return rq.post(f"{ROOT_ADDRESS}/member/addOrder", data=payload, verify=VERIFICATION)
+        return rq.post(f"{self.ENDPOINT}/member/addOrder", data=payload, verify=VERIFICATION)
 
     def __extract_market_price__(self, direction, symbol):
         market_price = self.get_discount(symbol=symbol)[0]
@@ -211,7 +212,7 @@ class VirgoCXClient:
         """
         payload = {"apiKey": self._api_key(), "id": order_id}
         payload["sign"] = self.signer(payload)
-        return rq.post(f"{ROOT_ADDRESS}/member/cancelOrder", data=payload, verify=VERIFICATION)
+        return rq.post(f"{self.ENDPOINT}/member/cancelOrder", data=payload, verify=VERIFICATION)
 
     @result_formatter()
     def get_discount(self, symbol: Optional[str] = None):
@@ -227,4 +228,4 @@ class VirgoCXClient:
         if symbol is not None:
             payload["symbol"] = symbol
         payload["sign"] = self.signer(payload)
-        return rq.get(f"{ROOT_ADDRESS}/member/discountPrice", params=payload, verify=VERIFICATION)
+        return rq.get(f"{self.ENDPOINT}/member/discountPrice", params=payload, verify=VERIFICATION)
