@@ -25,6 +25,7 @@ For more information on the REST api on which this was built, please refer to th
     - [Cancel Order](#cancel-order)
     - [Get Discount](#get-discount)
 - [Warnings](#warnings)
+- [Paused Trading](#paused-trading)
 
 ## Setup
 
@@ -157,3 +158,9 @@ or you can use the environment variable `PYTHONWARNINGS` to suppress the warning
 ```bash
 export PYTHONWARNINGS="ignore:Unverified HTTPS request"
 ```
+
+## Paused Trading
+
+It is possible that trading on the exchange is paused. Unfortunately, the client does not have a way to check
+if trading is paused and thus `KeyError` exceptions may be raised when attempting to access keys from the API which
+are omitted in such cases. Eventually we hope to have an endpoint which will allow us to check if trading is paused.
