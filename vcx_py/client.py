@@ -145,15 +145,25 @@ class VirgoCXClient:
                     qty = total / price
                     total = None
         else:  # i.e., quick trade or market order
-            if total is None and direction == OrderDirection.BUY:
+            if direction == OrderDirection.BUY:
+                if total is None:
+                    if not handle_conversions:
+                        raise ValueError("Total is required for non-limit buy orders")
+                    else:
+                        market_price = kwargs.get("market_price", None)
+                        if market_price is None:
+                            market_price = self.__extract_market_price__(direction, symbol)
+                        total = qty * market_price
+                        qty = None
+            elif qty is None:
                 if not handle_conversions:
-                    raise ValueError("Total is required for non-limit buy orders")
+                    raise ValueError("Quantity is required for non-buy orders")
                 else:
                     market_price = kwargs.get("market_price", None)
                     if market_price is None:
                         market_price = self.__extract_market_price__(direction, symbol)
-                    total = qty * market_price
-                    qty = None
+                    qty = total / market_price
+                    total = None
 
         payload = {"apiKey": self._api_key(), "symbol": symbol, "category": category, "type": direction,
                    "country": 1}
