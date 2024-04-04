@@ -9,14 +9,40 @@
 
 from enum import IntEnum
 
+
+class _Flag:
+    """A simple flag class."""
+
+    def __init__(self, value):
+        self._value = value
+
+    def set(self):
+        self._value = True
+
+    def unset(self):
+        self._value = False
+
+    def __bool__(self):
+        return self._value
+
+
 # Because CloudFlare is may block when accessed via the domain name, the IP address is used instead for now.
 ROOT_ADDRESS = "https://3.98.238.66/api"
 """The root address of the VirgoCX API."""
 
 # Once the CloudFlare issue is resolved, the domain name will be used instead of the IP and the following
 # can be set to True.
-VERIFICATION = False
-"""Whether or not to verify the SSL certificate of the VirgoCX API."""
+VERIFICATION = _Flag(False)
+"""
+Whether to verify the SSL certificate of the VirgoCX API.
+Use the `.set()` method to activate this feature.
+"""
+
+STOP_URLLIB_INSECURE_WARN = _Flag(False)
+"""
+Whether to suppress the urllib3 InsecureRequestWarning warning within this package.
+Use the `.set()` method to activate this feature.
+"""
 
 
 class KLineType(IntEnum):

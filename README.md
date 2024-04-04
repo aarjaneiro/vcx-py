@@ -145,18 +145,12 @@ discount = vc.get_discount(symbol="BTC/CAD")
 Note that due to CloudFlare protection, this version of the client attempts to access the API through its
 IP address and not the domain name. Should the IP address change, the client will need to be updated.
 Moreover, you will receive `InsecureRequestWarning` warnings when using the client until this issue is resolved.
-To suppress these warnings, you can use the following code:
+To suppress these warnings, you can use the following to disable such warnings from being emitted by this package:
 
 ```python
-import urllib3
+from vcx_py import STOP_URLLIB_INSECURE_WARN
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-```
-
-or you can use the environment variable `PYTHONWARNINGS` to suppress the warnings:
-
-```bash
-export PYTHONWARNINGS="ignore:Unverified HTTPS request"
+STOP_URLLIB_INSECURE_WARN.set()
 ```
 
 ## Paused Trading

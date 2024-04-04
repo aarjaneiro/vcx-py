@@ -8,7 +8,8 @@
 #  SOFTWARE.
 
 from .client import VirgoCXClient
-from .constants import KLineType, OrderStatus, OrderType, OrderDirection, Enums
+from .constants import KLineType, OrderStatus, OrderType, OrderDirection, Enums, STOP_URLLIB_INSECURE_WARN
 from .utils import VirgoCXException
 
-__all__ = ["VirgoCXClient", "VirgoCXException", "KLineType", "OrderStatus", "OrderType", "OrderDirection", "Enums"]
+__all__ = ["VirgoCXClient", "VirgoCXException", "KLineType", "OrderStatus", "OrderType", "OrderDirection", "Enums",
+           "STOP_URLLIB_INSECURE_WARN"]

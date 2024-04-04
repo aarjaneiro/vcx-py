@@ -9,8 +9,28 @@
 
 from hashlib import md5
 from typing import Union
+import warnings
 
-from vcx_py.constants import TYPICAL_KEY_TO_ENUM, ATYPICAL_KEY_TO_ENUM
+import urllib3 as url  # noqa (already comes with requests)
+
+from vcx_py.constants import TYPICAL_KEY_TO_ENUM, ATYPICAL_KEY_TO_ENUM, STOP_URLLIB_INSECURE_WARN
+
+
+def maybe_suppress_insecure(fn: callable) -> callable:
+    """
+    Potentially suppresses urllib3 InsecureRequestWarning warnings.
+
+    This only suppresses the warning within the context of this package.
+    """
+
+    def inner(*args, **kwargs):
+        if STOP_URLLIB_INSECURE_WARN:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", url.exceptions.InsecureRequestWarning)
+                return fn(*args, **kwargs)
+        return fn(*args, **kwargs)
+
+    return inner
 
 
 class VirgoCXWarning(Warning):

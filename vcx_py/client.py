@@ -15,7 +15,7 @@ import requests as rq
 
 from .constants import ROOT_ADDRESS, VERIFICATION, KLineType, OrderStatus, \
     OrderType, OrderDirection
-from .utils import VirgoCXWarning, VirgoCXException, vcx_sign, result_formatter
+from .utils import VirgoCXWarning, VirgoCXException, vcx_sign, result_formatter, maybe_suppress_insecure
 
 
 class VirgoCXClient:
@@ -44,6 +44,7 @@ class VirgoCXClient:
                                                         "min_total": v["minTotal"]} for v in
                                           self.tickers()}
 
+    @maybe_suppress_insecure
     @result_formatter()
     def kline(self, symbol: str, period: KLineType):
         """
@@ -57,6 +58,7 @@ class VirgoCXClient:
         return rq.get(f"{self.ENDPOINT}/market/history/kline", params={"symbol": symbol, "period": period},
                       verify=VERIFICATION)
 
+    @maybe_suppress_insecure
     @result_formatter()
     def ticker(self, symbol: str):
         """
@@ -66,6 +68,7 @@ class VirgoCXClient:
         """
         return rq.get(f"{self.ENDPOINT}/market/detail/merged", params={"symbol": symbol}, verify=VERIFICATION)
 
+    @maybe_suppress_insecure
     @result_formatter()
     def tickers(self):
         """
@@ -73,6 +76,7 @@ class VirgoCXClient:
         """
         return rq.get(f"{self.ENDPOINT}/market/tickers", verify=VERIFICATION)
 
+    @maybe_suppress_insecure
     @result_formatter()
     def account_info(self):
         """
@@ -82,6 +86,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.get(f"{self.ENDPOINT}/member/accounts", params=payload, verify=VERIFICATION)
 
+    @maybe_suppress_insecure
     @result_formatter()
     def query_orders(self, symbol: str, status: Optional[OrderStatus] = None):
         """
@@ -98,6 +103,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.get(f"{self.ENDPOINT}/member/queryOrder", params=payload, verify=VERIFICATION)
 
+    @maybe_suppress_insecure
     @result_formatter(False)
     def query_trades(self, symbol: str):
         """
@@ -109,6 +115,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.get(f"{self.ENDPOINT}/member/queryTrade", params=payload, verify=VERIFICATION)
 
+    @maybe_suppress_insecure
     @result_formatter()
     def place_order(self, symbol: str, category: OrderType, direction: OrderDirection,
                     price: Optional[float] = None, qty: Optional[float] = None,
@@ -213,6 +220,7 @@ class VirgoCXClient:
             market_price = float(market_price["Bid"])
         return market_price
 
+    @maybe_suppress_insecure
     @result_formatter()
     def cancel_order(self, order_id: str):
         """
@@ -224,6 +232,7 @@ class VirgoCXClient:
         payload["sign"] = self.signer(payload)
         return rq.post(f"{self.ENDPOINT}/member/cancelOrder", data=payload, verify=VERIFICATION)
 
+    @maybe_suppress_insecure
     @result_formatter()
     def get_discount(self, symbol: Optional[str] = None):
         """
